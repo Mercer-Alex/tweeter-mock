@@ -23,20 +23,20 @@ public class LoginTaskHandler extends Handler {
         this.observer = observer;
     }
 
-    @Override
-    public void handleMessage(Message message) {
-        Bundle bundle = message.getData();
-        boolean success = bundle.getBoolean(LoginTask.SUCCESS_KEY);
-        if (success) {
-            User user = (User) bundle.getSerializable(LoginTask.USER_KEY);
-            AuthToken authToken = (AuthToken) bundle.getSerializable(LoginTask.AUTH_TOKEN_KEY);
-            observer.handleSuccess(user, authToken);
-        } else if (bundle.containsKey(LoginTask.MESSAGE_KEY)) {
-            String errorMessage = bundle.getString(LoginTask.MESSAGE_KEY);
-            observer.handleFailure(errorMessage);
-        } else if (bundle.containsKey(LoginTask.EXCEPTION_KEY)) {
-            Exception ex = (Exception) bundle.getSerializable(LoginTask.EXCEPTION_KEY);
-            observer.handleException(ex);
-        }
-    }
+//    @Override
+//    public void handleMessage(Message message) {
+//        Bundle bundle = message.getData();
+//        boolean success = bundle.getBoolean(LoginTask.SUCCESS_KEY);
+//        if (success) {
+//            User user = (User) bundle.getSerializable(LoginTask.USER_KEY);
+//            AuthToken authToken = (AuthToken) bundle.getSerializable(LoginTask.AUTH_TOKEN_KEY);
+//            observer.handleSuccess(user, authToken);
+//        } else if (bundle.containsKey(LoginTask.MESSAGE_KEY)) {
+//            String errorMessage = bundle.getString(LoginTask.MESSAGE_KEY);
+//            observer.handleFailure(errorMessage);
+//        } else if (bundle.containsKey(LoginTask.EXCEPTION_KEY)) {
+//            Exception ex = (Exception) bundle.getSerializable(LoginTask.EXCEPTION_KEY);
+//            observer.handleException(ex);
+//        }
+//    }
 }
