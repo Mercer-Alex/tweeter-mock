@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.model.net.request.FollowRequest;
+import edu.byu.cs.tweeter.model.net.response.GetFollowersResponse;
+import edu.byu.cs.tweeter.model.net.response.SuccessResponse;
 import edu.byu.cs.tweeter.util.FakeData;
 import edu.byu.cs.tweeter.util.Pair;
 
@@ -19,12 +22,16 @@ public class FollowDAO {
      * @param follower the User whose count of how many following is desired.
      * @return said count.
      */
-    public Integer getFolloweeCount(User follower) {
+    public Integer getFolloweeCount(String follower) {
         // TODO: uses the dummy data.  Replace with a real implementation.
         assert follower != null;
         return getDummyFollowees().size();
     }
 
+    public Integer getFollowerCount(User user) {
+        assert user != null;
+        return getDummyFollowers().size();
+    }
     /**
      * Gets the users from the database that the user specified in the request is following. Uses
      * information in the request object to limit the number of followees returned and to return the
@@ -60,6 +67,31 @@ public class FollowDAO {
         }
 
         return new Pair<>(responseFollowees, hasMorePages);
+    }
+
+    public GetFollowersResponse getFollowers(String followerAlias, int limit, String lastFollowerAlias) {
+        // TODO: Generates dummy data. Replace with a real implementation.
+        assert limit > 0;
+        assert followerAlias != null;
+
+        List<User> allFollowers = getDummyFollowees();
+        List<User> responseFollowers = new ArrayList<>(limit);
+
+        boolean hasMorePages = false;
+
+        if(limit > 0) {
+            if (allFollowers != null) {
+                int followersIndex = getFolloweesStartingIndex(lastFollowerAlias, allFollowers);
+
+                for(int limitCounter = 0; followersIndex < allFollowers.size() && limitCounter < limit; followersIndex++, limitCounter++) {
+                    responseFollowers.add(allFollowers.get(followersIndex));
+                }
+
+                hasMorePages = followersIndex < allFollowers.size();
+            }
+        }
+
+        return new GetFollowersResponse(responseFollowers, hasMorePages);
     }
 
     /**
@@ -110,5 +142,13 @@ public class FollowDAO {
      */
     FakeData getFakeData() {
         return FakeData.getInstance();
+    }
+
+    List<User> getDummyFollowers() {
+        return getFakeData().getFakeUsers();
+    }
+
+    public SuccessResponse followUser(FollowRequest request) {
+        return new SuccessResponse(true);
     }
 }

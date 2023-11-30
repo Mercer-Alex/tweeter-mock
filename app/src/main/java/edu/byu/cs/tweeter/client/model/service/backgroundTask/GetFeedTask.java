@@ -4,9 +4,12 @@ import android.os.Handler;
 
 import java.util.List;
 
+import edu.byu.cs.tweeter.client.model.net.ServerFacade;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.model.net.request.GetFeedRequest;
+import edu.byu.cs.tweeter.model.net.response.GetFeedResponse;
 import edu.byu.cs.tweeter.util.Pair;
 
 /**
@@ -21,6 +24,25 @@ public class GetFeedTask extends PagedStatusTask {
 
     @Override
     protected Pair<List<Status>, Boolean> getItems() {
-        return getFakeData().getPageOfStatus(getLastItem(), getLimit());
+        try {
+            ServerFacade facade = new ServerFacade();
+            String targetUserAlias = getTargetUser() == null ? null : getTargetUser().getAlias();
+            Status lastStatus = getLastItem() == null ? new Status() : getLastItem();
+
+            GetFeedRequest request = new GetFeedRequest(getAuthToken(), targetUserAlias, getLimit(), lastStatus);
+            GetFeedResponse response = facade.getFeed(request, "get-feed");
+
+            if(response.isSuccess()) {
+                setLastItem(response.getFeed().get(response.getFeed().size() - 1));
+                return new Pair<>(response.getFeed(), response.getHasMorePages());
+            }
+            else {
+                sendFailedMessage(response.getMessage());
+            }
+        }
+        catch (Exception ex) {
+            sendExceptionMessage(ex);
+        }
+        return null;
     }
 }

@@ -93,9 +93,8 @@ public class StoryFragment extends Fragment implements ScrollableView<Status> {
         storyRecyclerView.setAdapter(storyRecyclerViewAdapter);
 
         presenter = new StoryPresenter(this);
-
         storyRecyclerView.addOnScrollListener(new StoryRecyclerViewPaginationScrollListener(layoutManager));
-        storyRecyclerViewAdapter.loadMoreItems();
+        presenter.loadMoreItems(user);
 
         return view;
     }
@@ -355,7 +354,7 @@ public class StoryFragment extends Fragment implements ScrollableView<Status> {
          * data.
          */
         void loadMoreItems() {
-            presenter.loadMoreItems(user);
+//            presenter.loadMoreItems(user);
         }
 
         /**

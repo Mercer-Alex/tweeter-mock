@@ -1,9 +1,5 @@
 package edu.byu.cs.tweeter.client.presenter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,7 +132,6 @@ public class MainPresenter implements UserService.LogoutObserver, FollowService.
         view.displayMessage("Failed to logout: " + message);
     }
 
-//        view.displayMessage("Failed to logout because of exception: " + ex.getMessage());
 
     public void logout(){
         view.displayMessage("Logging Out...");
@@ -150,7 +145,7 @@ public class MainPresenter implements UserService.LogoutObserver, FollowService.
             view.displayMessage("Unfollowing " + user.getName() + "...");
         }
         else {
-            new FollowService().followUser(token, user, this);
+            new FollowService().followUser(token, Cache.getInstance().getCurrUser(), this);
             view.displayMessage("Following " + user.getName() + "...");
         }
     }
@@ -163,13 +158,6 @@ public class MainPresenter implements UserService.LogoutObserver, FollowService.
             view.setFollowButtonVisibility(true);
             new FollowService().isFollower(token, user, Cache.getInstance().getCurrUser(), this);
         }
-    }
-
-    public String getFormattedDateTime() throws ParseException {
-        SimpleDateFormat userFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        SimpleDateFormat statusFormat = new SimpleDateFormat("MMM d yyyy h:mm aaa");
-
-        return statusFormat.format(userFormat.parse(LocalDate.now().toString() + " " + LocalTime.now().toString().substring(0, 8)));
     }
 
     public List<String> parseURLs(String post) {

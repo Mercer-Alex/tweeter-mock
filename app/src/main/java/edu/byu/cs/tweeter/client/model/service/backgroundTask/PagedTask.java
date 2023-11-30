@@ -32,7 +32,7 @@ public abstract class PagedTask<T> extends AuthenticatedTask {
      * The last status returned in the previous page of results (can be null).
      * This allows the new page to begin where the previous page ended.
      */
-    private final T lastItem;
+    private T lastItem;
 
     /**
      * The items returned in the current page of results.
@@ -61,6 +61,10 @@ public abstract class PagedTask<T> extends AuthenticatedTask {
 
     protected T getLastItem() {
         return lastItem;
+    }
+
+    protected void setLastItem(T item) {
+        this.lastItem = item;
     }
 
     @Override

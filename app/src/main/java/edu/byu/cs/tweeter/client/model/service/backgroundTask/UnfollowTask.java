@@ -32,7 +32,7 @@ public class UnfollowTask extends AuthenticatedTask {
         try {
             FollowRequest request = new FollowRequest(getAuthToken(), followee);
             ServerFacade facade = new ServerFacade();
-            SuccessResponse response = facade.unfollow(request);
+            SuccessResponse response = facade.unfollow(request, "unfollow");
 
             if (response.isSuccess()) {
                 sendSuccessMessage();

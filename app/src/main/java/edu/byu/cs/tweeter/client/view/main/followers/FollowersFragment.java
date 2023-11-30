@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,13 +23,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import edu.byu.cs.tweeter.R;
-import edu.byu.cs.tweeter.client.model.service.backgroundTask.GetFollowersTask;
-import edu.byu.cs.tweeter.client.model.service.backgroundTask.GetUserTask;
-import edu.byu.cs.tweeter.client.cache.Cache;
 import edu.byu.cs.tweeter.client.presenter.FollowersPresenter;
 import edu.byu.cs.tweeter.client.presenter.view.ScrollableView;
 import edu.byu.cs.tweeter.client.view.main.MainActivity;
@@ -76,13 +70,13 @@ public class FollowersFragment extends Fragment implements ScrollableView<User>{
 
         //noinspection ConstantConditions
         user = (User) getArguments().getSerializable(USER_KEY);
+        followersRecyclerViewAdapter = new FollowersRecyclerViewAdapter();
 
         RecyclerView followersRecyclerView = view.findViewById(R.id.followersRecyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         followersRecyclerView.setLayoutManager(layoutManager);
 
-        followersRecyclerViewAdapter = new FollowersRecyclerViewAdapter();
         followersRecyclerView.setAdapter(followersRecyclerViewAdapter);
 
         presenter = new FollowersPresenter(this);
@@ -271,14 +265,6 @@ public class FollowersFragment extends Fragment implements ScrollableView<User>{
         }
 
         /**
-         * Causes the Adapter to display a loading footer and make a request to get more following
-         * data.
-         */
-//        void loadMoreItems() {
-//            presenter.loadMoreFollowers(user);
-//        }
-
-        /**
          * Adds a dummy user to the list of users so the RecyclerView will display a view (the
          * loading footer view) at the bottom of the list.
          */
@@ -342,5 +328,4 @@ public class FollowersFragment extends Fragment implements ScrollableView<User>{
             }
         }
     }
-
 }

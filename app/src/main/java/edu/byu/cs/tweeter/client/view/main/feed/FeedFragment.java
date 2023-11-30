@@ -82,19 +82,18 @@ public class FeedFragment extends Fragment implements ScrollableView<Status> {
 
         //noinspection ConstantConditions
         user = (User) getArguments().getSerializable(USER_KEY);
+        feedRecyclerViewAdapter = new FeedRecyclerViewAdapter();
 
         RecyclerView feedRecyclerView = view.findViewById(R.id.feedRecyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         feedRecyclerView.setLayoutManager(layoutManager);
 
-        feedRecyclerViewAdapter = new FeedRecyclerViewAdapter();
         feedRecyclerView.setAdapter(feedRecyclerViewAdapter);
 
         presenter = new FeedPresenter(this);
-
         feedRecyclerView.addOnScrollListener(new FeedRecyclerViewPaginationScrollListener(layoutManager));
-        feedRecyclerViewAdapter.loadMoreItems();
+        presenter.loadMoreItems(user);
 
         return view;
     }
@@ -107,10 +106,12 @@ public class FeedFragment extends Fragment implements ScrollableView<Status> {
 
     @Override
     public void setLoadingStatus(boolean loading) {
-        if (loading) {
-            feedRecyclerViewAdapter.addLoadingFooter();
-        } else {
-            feedRecyclerViewAdapter.removeLoadingFooter();
+        if (feedRecyclerViewAdapter != null) {
+            if (loading) {
+                feedRecyclerViewAdapter.addLoadingFooter();
+            } else {
+                feedRecyclerViewAdapter.removeLoadingFooter();
+            }
         }
     }
 
@@ -242,7 +243,6 @@ public class FeedFragment extends Fragment implements ScrollableView<Status> {
                 }
             }
         }
-
     }
 
     /**
@@ -354,7 +354,7 @@ public class FeedFragment extends Fragment implements ScrollableView<Status> {
          * data.
          */
         void loadMoreItems() {
-           presenter.loadMoreItems(user);
+//           presenter.loadMoreItems(user);
         }
 
         /**

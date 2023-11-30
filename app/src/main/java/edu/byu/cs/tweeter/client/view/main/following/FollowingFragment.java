@@ -79,11 +79,10 @@ public class FollowingFragment extends Fragment implements ScrollableView<User> 
         followingRecyclerViewAdapter = new FollowingRecyclerViewAdapter();
         followingRecyclerView.setAdapter(followingRecyclerViewAdapter);
 
-        followingRecyclerView.addOnScrollListener(new FollowRecyclerViewPaginationScrollListener(layoutManager));
 
         presenter = new FollowingPresenter(this);
-
-        followingRecyclerViewAdapter.loadMoreItems();
+        followingRecyclerView.addOnScrollListener(new FollowRecyclerViewPaginationScrollListener(layoutManager));
+        presenter.loadMoreItems(user);
         return view;
     }
 
@@ -294,7 +293,7 @@ public class FollowingFragment extends Fragment implements ScrollableView<User> 
          * data.
          */
         void loadMoreItems() {
-            presenter.loadMoreItems(user);
+//            presenter.loadMoreItems(user);
         }
 
         /**
